@@ -1,0 +1,676 @@
+Index: .idea/jarRepositories.xml
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/.idea/jarRepositories.xml b/.idea/jarRepositories.xml
+new file mode 100644
+--- /dev/null	(date 1662266488513)
++++ b/.idea/jarRepositories.xml	(date 1662266488513)
+@@ -0,0 +1,20 @@
++<?xml version="1.0" encoding="UTF-8"?>
++<project version="4">
++  <component name="RemoteRepositoriesConfiguration">
++    <remote-repository>
++      <option name="id" value="central" />
++      <option name="name" value="Central Repository" />
++      <option name="url" value="https://repo.maven.apache.org/maven2" />
++    </remote-repository>
++    <remote-repository>
++      <option name="id" value="central" />
++      <option name="name" value="Maven Central repository" />
++      <option name="url" value="https://repo1.maven.org/maven2" />
++    </remote-repository>
++    <remote-repository>
++      <option name="id" value="jboss.community" />
++      <option name="name" value="JBoss Community repository" />
++      <option name="url" value="https://repository.jboss.org/nexus/content/repositories/public/" />
++    </remote-repository>
++  </component>
++</project>
+\ No newline at end of file
+Index: src/main/java/Exam2/StepDefinitions.java
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/src/main/java/Exam2/StepDefinitions.java b/src/main/java/Exam2/StepDefinitions.java
+new file mode 100644
+--- /dev/null	(date 1662919948837)
++++ b/src/main/java/Exam2/StepDefinitions.java	(date 1662919948837)
+@@ -0,0 +1,71 @@
++package Exam2;
++
++import io.cucumber.java.After;
++import io.cucumber.java.Before;
++import io.cucumber.java.en.*;
++import org.junit.jupiter.api.Assertions;
++import org.openqa.selenium.*;
++import org.openqa.selenium.chrome.ChromeDriver;
++import org.openqa.selenium.support.ui.ExpectedConditions;
++import org.openqa.selenium.support.ui.WebDriverWait;
++import java.time.Duration;
++import java.util.List;
++
++public class StepDefinitions {
++    public WebDriver driver;
++    public WebDriverWait wait;
++
++    @Before
++    public void SetUp() {
++        String projectPath = System.getProperty("user.dir");
++        System.setProperty("webdriver.chrome.driver", projectPath + "/src/main/resources/chromedriver.exe");
++        driver = new ChromeDriver();
++        driver.manage().window().maximize();
++        wait = new WebDriverWait(driver, Duration.ofSeconds(10));
++    }
++
++    @After
++    public void Quit() {
++        driver.quit();
++    }
++
++    public WebElement findElementWithWait(By locator) {
++        return wait.until(ExpectedConditions.presenceOfElementLocated(locator));
++    }
++
++    public List<WebElement> findElementsWithWait(By locator) {
++        return wait.until(ExpectedConditions.presenceOfAllElementsLocatedBy(locator));
++    }
++
++    @Given("I navigate to login page")
++    public void i_navigate_to_login_page() {
++        driver.navigate().to("https://www.globalsqa.com/angularJs-protractor/BankingProject/#/login");
++    }
++
++    @And("I click on Bank Manager Login")
++    public void i_click_on_Bank_Manager_Login() {
++        findElementWithWait(By.xpath("//button[text()='Bank Manager Login']")).click();
++    }
++
++    @When("I click on Customers")
++    public void i_click_on_Customers() {
++        findElementWithWait(By.xpath("//button[text()[normalize-space()='Customers']]")).click();
++    }
++
++    @Then("I record the total number of lines in the table delete one line and verify lines are minus one")
++    public void i_record_the_total_number_of_lines_in_the_table_delete_one_line_and_verify_lines_are_minus_one() {
++        List<WebElement> BeforeOneLineDeletion = findElementsWithWait(By.xpath("//table[contains(@class,'table table-bordered')]/tbody[1]/tr"));
++        System.out.println("Before deletion the number of lines in the table are: " +BeforeOneLineDeletion.size());
++
++        findElementWithWait(By.xpath("(//button[text()='Delete'])[1]")).click();
++        List<WebElement> AfterOneLineDeletion = findElementsWithWait(By.xpath("//table[contains(@class,'table table-bordered')]/tbody[1]/tr"));
++
++        System.out.println("After deletion the number of lines in the table are: " +AfterOneLineDeletion.size()+"\n"+
++                "Assertion verification should be: " + -(BeforeOneLineDeletion.size() - AfterOneLineDeletion.size()));
++
++
++       Assertions.assertEquals(BeforeOneLineDeletion.size()-1,AfterOneLineDeletion.size());
++    }
++
++
++}
+Index: src/main/java/Exam2/Delete.feature
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/src/main/java/Exam2/Delete.feature b/src/main/java/Exam2/Delete.feature
+new file mode 100644
+--- /dev/null	(date 1662918269206)
++++ b/src/main/java/Exam2/Delete.feature	(date 1662918269206)
+@@ -0,0 +1,7 @@
++  Feature: DeleteRecordVerification
++    Scenario: Login to page
++      Given I navigate to login page
++      And I click on Bank Manager Login
++      When I click on Customers
++      Then I record the total number of lines in the table delete one line and verify lines are minus one
++
+Index: .gitignore
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/.gitignore b/.gitignore
+new file mode 100644
+--- /dev/null	(date 1662957908109)
++++ b/.gitignore	(date 1662957908109)
+@@ -0,0 +1,2 @@
++# Project exclude paths
++/target/
+\ No newline at end of file
+Index: src/main/java/Exam/BaseClass.java
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/src/main/java/Exam/BaseClass.java b/src/main/java/Exam/BaseClass.java
+new file mode 100644
+--- /dev/null	(date 1662822983462)
++++ b/src/main/java/Exam/BaseClass.java	(date 1662822983462)
+@@ -0,0 +1,32 @@
++package Exam;
++
++import org.openqa.selenium.By;
++import org.openqa.selenium.WebDriver;
++import org.openqa.selenium.WebElement;
++import org.openqa.selenium.support.ui.ExpectedConditions;
++import org.openqa.selenium.support.ui.WebDriverWait;
++
++import java.util.List;
++
++public class BaseClass {
++    WebDriver driver;
++    private WebDriverWait wait;
++
++    public BaseClass(WebDriver driver, WebDriverWait wait) {
++        this.driver = driver;
++        this.wait = wait;
++    }
++    public WebDriver Driver() {
++        return driver;
++    }
++    public WebDriverWait Wait() {
++        return wait;
++    }
++    public WebElement findElementWithWait(By locator){
++        return Wait().until(ExpectedConditions.presenceOfElementLocated(locator));
++    }
++    public List<WebElement> findElementsWithWait(By locator){
++        return Wait().until(ExpectedConditions.presenceOfAllElementsLocatedBy(locator));
++    }
++
++}
+Index: src/main/java/Exam/BaseTestClass.java
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/src/main/java/Exam/BaseTestClass.java b/src/main/java/Exam/BaseTestClass.java
+new file mode 100644
+--- /dev/null	(date 1662822983456)
++++ b/src/main/java/Exam/BaseTestClass.java	(date 1662822983456)
+@@ -0,0 +1,28 @@
++package Exam;
++
++import org.junit.jupiter.api.AfterEach;
++import org.junit.jupiter.api.BeforeEach;
++import org.openqa.selenium.WebDriver;
++import org.openqa.selenium.chrome.ChromeDriver;
++import org.openqa.selenium.support.ui.WebDriverWait;
++
++
++public class BaseTestClass {
++    public WebDriver driver;
++    public WebDriverWait wait;
++
++    @BeforeEach
++    public void Setup(){
++        String projectPath = System.getProperty("user.dir");
++        System.setProperty("webdriver.chrome.driver",projectPath + "/src/main/resources/chromedriver.exe");
++        driver = new ChromeDriver();
++        driver.manage().window().maximize();
++
++    }
++
++    @AfterEach
++    public void AfterEachTest(){
++        driver.quit();
++    }
++}
++
+Index: src/main/java/Exam3/GetRest.java
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/src/main/java/Exam3/GetRest.java b/src/main/java/Exam3/GetRest.java
+new file mode 100644
+--- /dev/null	(date 1662957449171)
++++ b/src/main/java/Exam3/GetRest.java	(date 1662957449171)
+@@ -0,0 +1,26 @@
++package Exam3;
++
++import io.restassured.response.Response;
++import org.junit.jupiter.api.*;
++import static io.restassured.RestAssured.*;
++
++
++public class GetRest {
++
++    @Test
++    public void Task3() {
++        Response response = given()
++                .param("format","json")
++                .when()
++                .get("https://swapi.dev/api/people/1")
++                .then()
++                .extract().response();
++        System.out.println(response.body().asPrettyString());
++
++        Assertions.assertEquals("Luke Skywalker", response.jsonPath().getString("name"));
++        Assertions.assertEquals("172", response.jsonPath().getString("height"));
++        Assertions.assertEquals("77", response.jsonPath().getString("mass"));
++        Assertions.assertEquals("blond", response.jsonPath().getString("hair_color"));
++        Assertions.assertEquals("fair", response.jsonPath().getString("skin_color"));
++    }
++}
+\ No newline at end of file
+Index: src/main/java/Exam/Tests.java
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/src/main/java/Exam/Tests.java b/src/main/java/Exam/Tests.java
+new file mode 100644
+--- /dev/null	(date 1662870767590)
++++ b/src/main/java/Exam/Tests.java	(date 1662870767590)
+@@ -0,0 +1,16 @@
++package Exam;
++
++import Selenium.BaseTestClass;
++import org.junit.jupiter.api.Test;
++
++import java.util.concurrent.TimeUnit;
++
++public class Tests extends BaseTestClass {
++
++    @Test
++    public void ExamTask1() throws InterruptedException {
++        Deposit page = new Deposit(driver,wait);
++        page.NavigateToDeposit();
++        page.SelectDepositPositiveTest();
++    }
++}
+Index: src/main/java/Exam/Deposit.java
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/src/main/java/Exam/Deposit.java b/src/main/java/Exam/Deposit.java
+new file mode 100644
+--- /dev/null	(date 1662871657498)
++++ b/src/main/java/Exam/Deposit.java	(date 1662871657498)
+@@ -0,0 +1,65 @@
++package Exam;
++
++import Selenium.BaseClass;
++import org.junit.jupiter.api.Assertions;
++import org.openqa.selenium.By;
++import org.openqa.selenium.WebDriver;
++import org.openqa.selenium.WebElement;
++import org.openqa.selenium.support.ui.WebDriverWait;
++
++import java.time.Duration;
++import java.util.ArrayList;
++import java.util.List;
++import java.util.concurrent.TimeUnit;
++
++public class Deposit extends BaseClass {
++
++    public Deposit(WebDriver driver, WebDriverWait wait) {
++        super(driver, new WebDriverWait(driver, Duration.ofSeconds(30)));
++    }
++
++    public void NavigateToDeposit() {
++        driver.navigate().to("https://www.globalsqa.com/angularJs-protractor/BankingProject/#/login");
++        var stop = 0;
++    }
++
++    public void SelectDepositPositiveTest() throws InterruptedException {
++
++        findElementWithWait(By.xpath("//button[contains(text(),'Customer Login')]")).click();
++        TimeUnit.SECONDS.sleep(1);
++        findElementWithWait(By.xpath("//*[@id='userSelect']")).click();
++        TimeUnit.SECONDS.sleep(1);
++        findElementWithWait(By.xpath("//*[@id='userSelect']/option[3]")).click();
++        TimeUnit.SECONDS.sleep(1);
++        findElementWithWait(By.xpath("//button[contains(text(),'Login')]")).click();
++        TimeUnit.SECONDS.sleep(1);
++        findElementWithWait(By.xpath("//button[@ng-class='btnClass2']")).click();
++        TimeUnit.SECONDS.sleep(1);
++        findElementWithWait(By.xpath("//*[@placeholder='amount']")).click();
++        TimeUnit.SECONDS.sleep(1);
++        driver.findElement(By.xpath("//*[@placeholder='amount']")).sendKeys("1000");
++        TimeUnit.SECONDS.sleep(1);
++        findElementWithWait(By.xpath("//button[text()='Deposit']")).click();
++        TimeUnit.SECONDS.sleep(1);
++        driver.findElement(By.xpath("//*[@placeholder='amount']")).sendKeys("1000");
++        TimeUnit.SECONDS.sleep(1);
++        findElementWithWait(By.xpath("//button[text()='Deposit']")).click();
++        TimeUnit.SECONDS.sleep(1);
++        findElementWithWait(By.xpath("//button[text()='Deposit']")).click();
++
++        List<String> actualList = new ArrayList<>();
++
++        List<WebElement> Balance = driver.findElements(By.xpath("(//strong[@class='ng-binding']/following-sibling::strong)[1]"));
++        for (var element1 : Balance) {
++            System.out.println("Balance: " + element1.getText());
++
++            actualList.add(Balance.get(0).getText());
++            List<String> expectedList = new ArrayList<>();
++
++            expectedList.add("2000");
++            Assertions.assertEquals(expectedList, actualList);
++
++        }
++    }
++}
++
+Index: .idea/misc.xml
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/.idea/misc.xml b/.idea/misc.xml
+new file mode 100644
+--- /dev/null	(date 1662266488493)
++++ b/.idea/misc.xml	(date 1662266488493)
+@@ -0,0 +1,14 @@
++<?xml version="1.0" encoding="UTF-8"?>
++<project version="4">
++  <component name="ExternalStorageConfigurationManager" enabled="true" />
++  <component name="MavenProjectsManager">
++    <option name="originalFiles">
++      <list>
++        <option value="$PROJECT_DIR$/pom.xml" />
++      </list>
++    </option>
++  </component>
++  <component name="ProjectRootManager" version="2" languageLevel="JDK_18" default="true" project-jdk-name="openjdk-18" project-jdk-type="JavaSDK">
++    <output url="file://$PROJECT_DIR$/out" />
++  </component>
++</project>
+\ No newline at end of file
+Index: pom.xml
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/pom.xml b/pom.xml
+new file mode 100644
+--- /dev/null	(date 1662884497655)
++++ b/pom.xml	(date 1662884497655)
+@@ -0,0 +1,90 @@
++<?xml version="1.0" encoding="UTF-8"?>
++<project xmlns="http://maven.apache.org/POM/4.0.0"
++         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
++         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
++    <modelVersion>4.0.0</modelVersion>
++
++    <groupId>org.example</groupId>
++    <artifactId>ExamPrep1</artifactId>
++    <version>1.0-SNAPSHOT</version>
++
++    <properties>
++        <maven.compiler.source>18</maven.compiler.source>
++        <maven.compiler.target>18</maven.compiler.target>
++    </properties>
++    <dependencies>
++        <!-- https://mvnrepository.com/artifact/org.junit.jupiter/junit-jupiter-api -->
++        <dependency>
++            <groupId>org.junit.jupiter</groupId>
++            <artifactId>junit-jupiter-api</artifactId>
++            <version>5.9.0</version>
++        </dependency>
++
++        <!-- https://mvnrepository.com/artifact/org.seleniumhq.selenium/selenium-java -->
++        <dependency>
++            <groupId>org.seleniumhq.selenium</groupId>
++            <artifactId>selenium-java</artifactId>
++            <version>4.4.0</version>
++        </dependency>
++        <dependency>
++            <groupId>org.junit.jupiter</groupId>
++            <artifactId>junit-jupiter-api</artifactId>
++            <version>5.9.0</version>
++        </dependency>
++        <dependency>
++            <groupId>org.seleniumhq.selenium</groupId>
++            <artifactId>selenium-java</artifactId>
++            <version>4.4.0</version>
++        </dependency>
++        <dependency>
++            <groupId>io.cucumber</groupId>
++            <artifactId>cucumber-java</artifactId>
++            <version>7.4.1</version>
++        </dependency>
++        <dependency>
++            <groupId>io.cucumber</groupId>
++            <artifactId>cucumber-junit</artifactId>
++            <version>7.6.0</version>
++            <scope>compile</scope>
++        </dependency>
++        <dependency>
++            <groupId>io.rest-assured</groupId>
++            <artifactId>rest-assured</artifactId>
++            <version>5.1.1</version>
++            <scope>compile</scope>
++        </dependency>
++        <dependency>
++            <groupId>io.cucumber</groupId>
++            <artifactId>cucumber-java</artifactId>
++            <version>7.4.1</version>
++        </dependency>
++        <!-- https://mvnrepository.com/artifact/org.junit.jupiter/junit-jupiter-api -->
++        <dependency>
++            <groupId>org.junit.jupiter</groupId>
++            <artifactId>junit-jupiter-api</artifactId>
++            <version>5.9.0</version>
++            <scope>compile</scope>
++        </dependency>
++
++        <!-- https://mvnrepository.com/artifact/io.cucumber/cucumber-junit -->
++        <dependency>
++            <groupId>io.cucumber</groupId>
++            <artifactId>cucumber-junit</artifactId>
++            <version>7.4.1</version>
++            <scope>compile</scope>
++        </dependency>
++        <!-- https://mvnrepository.com/artifact/org.seleniumhq.selenium/selenium-java -->
++        <dependency>
++            <groupId>org.seleniumhq.selenium</groupId>
++            <artifactId>selenium-java</artifactId>
++            <version>4.3.0</version>
++        </dependency>
++        <dependency>
++            <groupId>com.aventstack</groupId>
++            <artifactId>extentreports</artifactId>
++            <version>3.1.5</version>
++        </dependency>
++
++
++    </dependencies>
++</project>
+\ No newline at end of file
+Index: .idea/uiDesigner.xml
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/.idea/uiDesigner.xml b/.idea/uiDesigner.xml
+new file mode 100644
+--- /dev/null	(date 1662270326295)
++++ b/.idea/uiDesigner.xml	(date 1662270326295)
+@@ -0,0 +1,124 @@
++<?xml version="1.0" encoding="UTF-8"?>
++<project version="4">
++  <component name="Palette2">
++    <group name="Swing">
++      <item class="com.intellij.uiDesigner.HSpacer" tooltip-text="Horizontal Spacer" icon="/com/intellij/uiDesigner/icons/hspacer.svg" removable="false" auto-create-binding="false" can-attach-label="false">
++        <default-constraints vsize-policy="1" hsize-policy="6" anchor="0" fill="1" />
++      </item>
++      <item class="com.intellij.uiDesigner.VSpacer" tooltip-text="Vertical Spacer" icon="/com/intellij/uiDesigner/icons/vspacer.svg" removable="false" auto-create-binding="false" can-attach-label="false">
++        <default-constraints vsize-policy="6" hsize-policy="1" anchor="0" fill="2" />
++      </item>
++      <item class="javax.swing.JPanel" icon="/com/intellij/uiDesigner/icons/panel.svg" removable="false" auto-create-binding="false" can-attach-label="false">
++        <default-constraints vsize-policy="3" hsize-policy="3" anchor="0" fill="3" />
++      </item>
++      <item class="javax.swing.JScrollPane" icon="/com/intellij/uiDesigner/icons/scrollPane.svg" removable="false" auto-create-binding="false" can-attach-label="true">
++        <default-constraints vsize-policy="7" hsize-policy="7" anchor="0" fill="3" />
++      </item>
++      <item class="javax.swing.JButton" icon="/com/intellij/uiDesigner/icons/button.svg" removable="false" auto-create-binding="true" can-attach-label="false">
++        <default-constraints vsize-policy="0" hsize-policy="3" anchor="0" fill="1" />
++        <initial-values>
++          <property name="text" value="Button" />
++        </initial-values>
++      </item>
++      <item class="javax.swing.JRadioButton" icon="/com/intellij/uiDesigner/icons/radioButton.svg" removable="false" auto-create-binding="true" can-attach-label="false">
++        <default-constraints vsize-policy="0" hsize-policy="3" anchor="8" fill="0" />
++        <initial-values>
++          <property name="text" value="RadioButton" />
++        </initial-values>
++      </item>
++      <item class="javax.swing.JCheckBox" icon="/com/intellij/uiDesigner/icons/checkBox.svg" removable="false" auto-create-binding="true" can-attach-label="false">
++        <default-constraints vsize-policy="0" hsize-policy="3" anchor="8" fill="0" />
++        <initial-values>
++          <property name="text" value="CheckBox" />
++        </initial-values>
++      </item>
++      <item class="javax.swing.JLabel" icon="/com/intellij/uiDesigner/icons/label.svg" removable="false" auto-create-binding="false" can-attach-label="false">
++        <default-constraints vsize-policy="0" hsize-policy="0" anchor="8" fill="0" />
++        <initial-values>
++          <property name="text" value="Label" />
++        </initial-values>
++      </item>
++      <item class="javax.swing.JTextField" icon="/com/intellij/uiDesigner/icons/textField.svg" removable="false" auto-create-binding="true" can-attach-label="true">
++        <default-constraints vsize-policy="0" hsize-policy="6" anchor="8" fill="1">
++          <preferred-size width="150" height="-1" />
++        </default-constraints>
++      </item>
++      <item class="javax.swing.JPasswordField" icon="/com/intellij/uiDesigner/icons/passwordField.svg" removable="false" auto-create-binding="true" can-attach-label="true">
++        <default-constraints vsize-policy="0" hsize-policy="6" anchor="8" fill="1">
++          <preferred-size width="150" height="-1" />
++        </default-constraints>
++      </item>
++      <item class="javax.swing.JFormattedTextField" icon="/com/intellij/uiDesigner/icons/formattedTextField.svg" removable="false" auto-create-binding="true" can-attach-label="true">
++        <default-constraints vsize-policy="0" hsize-policy="6" anchor="8" fill="1">
++          <preferred-size width="150" height="-1" />
++        </default-constraints>
++      </item>
++      <item class="javax.swing.JTextArea" icon="/com/intellij/uiDesigner/icons/textArea.svg" removable="false" auto-create-binding="true" can-attach-label="true">
++        <default-constraints vsize-policy="6" hsize-policy="6" anchor="0" fill="3">
++          <preferred-size width="150" height="50" />
++        </default-constraints>
++      </item>
++      <item class="javax.swing.JTextPane" icon="/com/intellij/uiDesigner/icons/textPane.svg" removable="false" auto-create-binding="true" can-attach-label="true">
++        <default-constraints vsize-policy="6" hsize-policy="6" anchor="0" fill="3">
++          <preferred-size width="150" height="50" />
++        </default-constraints>
++      </item>
++      <item class="javax.swing.JEditorPane" icon="/com/intellij/uiDesigner/icons/editorPane.svg" removable="false" auto-create-binding="true" can-attach-label="true">
++        <default-constraints vsize-policy="6" hsize-policy="6" anchor="0" fill="3">
++          <preferred-size width="150" height="50" />
++        </default-constraints>
++      </item>
++      <item class="javax.swing.JComboBox" icon="/com/intellij/uiDesigner/icons/comboBox.svg" removable="false" auto-create-binding="true" can-attach-label="true">
++        <default-constraints vsize-policy="0" hsize-policy="2" anchor="8" fill="1" />
++      </item>
++      <item class="javax.swing.JTable" icon="/com/intellij/uiDesigner/icons/table.svg" removable="false" auto-create-binding="true" can-attach-label="false">
++        <default-constraints vsize-policy="6" hsize-policy="6" anchor="0" fill="3">
++          <preferred-size width="150" height="50" />
++        </default-constraints>
++      </item>
++      <item class="javax.swing.JList" icon="/com/intellij/uiDesigner/icons/list.svg" removable="false" auto-create-binding="true" can-attach-label="false">
++        <default-constraints vsize-policy="6" hsize-policy="2" anchor="0" fill="3">
++          <preferred-size width="150" height="50" />
++        </default-constraints>
++      </item>
++      <item class="javax.swing.JTree" icon="/com/intellij/uiDesigner/icons/tree.svg" removable="false" auto-create-binding="true" can-attach-label="false">
++        <default-constraints vsize-policy="6" hsize-policy="6" anchor="0" fill="3">
++          <preferred-size width="150" height="50" />
++        </default-constraints>
++      </item>
++      <item class="javax.swing.JTabbedPane" icon="/com/intellij/uiDesigner/icons/tabbedPane.svg" removable="false" auto-create-binding="true" can-attach-label="false">
++        <default-constraints vsize-policy="3" hsize-policy="3" anchor="0" fill="3">
++          <preferred-size width="200" height="200" />
++        </default-constraints>
++      </item>
++      <item class="javax.swing.JSplitPane" icon="/com/intellij/uiDesigner/icons/splitPane.svg" removable="false" auto-create-binding="false" can-attach-label="false">
++        <default-constraints vsize-policy="3" hsize-policy="3" anchor="0" fill="3">
++          <preferred-size width="200" height="200" />
++        </default-constraints>
++      </item>
++      <item class="javax.swing.JSpinner" icon="/com/intellij/uiDesigner/icons/spinner.svg" removable="false" auto-create-binding="true" can-attach-label="true">
++        <default-constraints vsize-policy="0" hsize-policy="6" anchor="8" fill="1" />
++      </item>
++      <item class="javax.swing.JSlider" icon="/com/intellij/uiDesigner/icons/slider.svg" removable="false" auto-create-binding="true" can-attach-label="false">
++        <default-constraints vsize-policy="0" hsize-policy="6" anchor="8" fill="1" />
++      </item>
++      <item class="javax.swing.JSeparator" icon="/com/intellij/uiDesigner/icons/separator.svg" removable="false" auto-create-binding="false" can-attach-label="false">
++        <default-constraints vsize-policy="6" hsize-policy="6" anchor="0" fill="3" />
++      </item>
++      <item class="javax.swing.JProgressBar" icon="/com/intellij/uiDesigner/icons/progressbar.svg" removable="false" auto-create-binding="true" can-attach-label="false">
++        <default-constraints vsize-policy="0" hsize-policy="6" anchor="0" fill="1" />
++      </item>
++      <item class="javax.swing.JToolBar" icon="/com/intellij/uiDesigner/icons/toolbar.svg" removable="false" auto-create-binding="false" can-attach-label="false">
++        <default-constraints vsize-policy="0" hsize-policy="6" anchor="0" fill="1">
++          <preferred-size width="-1" height="20" />
++        </default-constraints>
++      </item>
++      <item class="javax.swing.JToolBar$Separator" icon="/com/intellij/uiDesigner/icons/toolbarSeparator.svg" removable="false" auto-create-binding="false" can-attach-label="false">
++        <default-constraints vsize-policy="0" hsize-policy="0" anchor="0" fill="1" />
++      </item>
++      <item class="javax.swing.JScrollBar" icon="/com/intellij/uiDesigner/icons/scrollbar.svg" removable="false" auto-create-binding="true" can-attach-label="false">
++        <default-constraints vsize-policy="6" hsize-policy="0" anchor="0" fill="2" />
++      </item>
++    </group>
++  </component>
++</project>
+\ No newline at end of file
+Index: .idea/.gitignore
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/.idea/.gitignore b/.idea/.gitignore
+new file mode 100644
+--- /dev/null	(date 1662266466438)
++++ b/.idea/.gitignore	(date 1662266466438)
+@@ -0,0 +1,3 @@
++# Default ignored files
++/shelf/
++/workspace.xml
+Index: .idea/encodings.xml
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/.idea/encodings.xml b/.idea/encodings.xml
+new file mode 100644
+--- /dev/null	(date 1662266488503)
++++ b/.idea/encodings.xml	(date 1662266488503)
+@@ -0,0 +1,7 @@
++<?xml version="1.0" encoding="UTF-8"?>
++<project version="4">
++  <component name="Encoding">
++    <file url="file://$PROJECT_DIR$/src/main/java" charset="UTF-8" />
++    <file url="file://$PROJECT_DIR$/src/main/resources" charset="UTF-8" />
++  </component>
++</project>
+\ No newline at end of file
+Index: .idea/compiler.xml
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/.idea/compiler.xml b/.idea/compiler.xml
+new file mode 100644
+--- /dev/null	(date 1662957736030)
++++ b/.idea/compiler.xml	(date 1662957736030)
+@@ -0,0 +1,13 @@
++<?xml version="1.0" encoding="UTF-8"?>
++<project version="4">
++  <component name="CompilerConfiguration">
++    <annotationProcessing>
++      <profile name="Maven default annotation processors profile" enabled="true">
++        <sourceOutputDir name="target/generated-sources/annotations" />
++        <sourceTestOutputDir name="target/generated-test-sources/test-annotations" />
++        <outputRelativeToContentRoot value="true" />
++        <module name="Exacm" />
++      </profile>
++    </annotationProcessing>
++  </component>
++</project>
+\ No newline at end of file
